@@ -1,0 +1,22 @@
+.list{
+   max-height:auto;
+   border: 1px solid black;
+   /* border-radius: ; */
+}
+.options{
+    max-height: 25rem;
+    list-style:none;
+    text-align: left;
+    padding-left:0;
+}
+.option{
+    padding: 0.2rem;
+    border:0.2rem solid transparent;
+    display: block;
+}
+
+.option:hover{
+ background-color: antiquewhite;
+ cursor: pointer;
+}
+
