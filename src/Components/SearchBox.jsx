@@ -6,9 +6,16 @@ export default function SearchBox({ setResult }) {
     let [input, setInput] = useState("");
     let [options, setOptions] = useState([])
     let [selectedOption, setSelectedOption] = useState(null);
-
+    let [cache, setCache] = useState({});
+    let [isChoosing, setIsChoosing] = useState(false)
     let handleChange = (event) => {
+        console.log(event.target.value);
         setInput(event.target.value);
+        setIsChoosing(true);
+        if(event.target.value=""){
+            setIsChoosing(false);
+            return ;
+        }
     }
 
     let searchLocations = async () => {
@@ -19,11 +26,19 @@ export default function SearchBox({ setResult }) {
             let resCoordinates = await fetch(`/api${geoUrl}?q=${input}&limit=${limit}&appid=${apiKey}`);
             let jsonCoordinates = await resCoordinates.json();
             setOptions(jsonCoordinates);
+            setCache(prev => ({ ...prev, [input]: jsonCoordinates }));
         }
     }
 
     useEffect(() => {
-        searchLocations();
+        if (cache[input]) {
+            setOptions(cache[input]);
+            return;
+        }
+        let timer = setTimeout(searchLocations, 300);
+        return () => {
+            clearTimeout(timer);
+        }
     }, [input]);
 
     let searchWeather = async (lat, lon) => {
@@ -70,6 +85,7 @@ export default function SearchBox({ setResult }) {
             }
         });
         setSelectedOption(coordinates);
+        setIsChoosing(false);
     }
 
     useEffect(() => {
@@ -77,20 +93,34 @@ export default function SearchBox({ setResult }) {
         searchWeather(selectedOption.lat, selectedOption.lon);
     }, [selectedOption])
 
-return (
-    <div className="row">
-        <div className="col-6 mx-auto">
-            <div className="input-group">
-                <input type="text" className="form-control " value={input} onChange={handleChange} />
-            </div>
-            <div className='list'>
+
+
+
+    let inpStyles = {
+        borderRadius: "2rem",
+        backgroundColor: isChoosing ? "white" : "#ececec",
+        border: isChoosing ? null : "#dee2e6",
+    }
+
+    return (
+        <div className="row">
+            <div className="col-6 mx-auto">
+                <div className="input-group">
+                    <input
+                        style={inpStyles}
+                        type="text"
+                        className="form-control SearchBox"
+                        value={input}
+                        onChange={handleChange}
+                    />
+                </div>
                 <ul className='options'>
-                    {options.length > 0 && options.map((el, index) => {
-                        return <button key={index} onClick={handleSearch} className='btn option' type="submit">{el.name},{el.country}</button>
+                    {(isChoosing && options.length > 0) && options.map((el, index) => {
+                        return <li key={index} onClick={handleSearch} type="submit">{el.name},{el.country}</li>
                     })}
                 </ul>
+
             </div>
-        </div>
-    </div>
-)
+        </div >
+    )
 }

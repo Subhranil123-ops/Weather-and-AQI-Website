@@ -4,7 +4,7 @@ import ForcastPanel from "./Components/ForcastPanel.jsx"
 
 
 export default function WeatherApp() {
- let [result, setResult] = useState([])   
+ let [result, setResult] = useState([]);  
     return (
         <>
             <SearchBox setResult={setResult}/>
