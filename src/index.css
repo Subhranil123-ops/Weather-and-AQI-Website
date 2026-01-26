@@ -1,16 +1,25 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+body{
+  background-color: var(--bg-page);
+   --bg-graph-temp:rgba(245, 158, 11, 0.3);
+}
+:root{
+  
+  --bg-page:rgb(249, 247, 247);
+  --bg-nav:rgb(168, 168, 168);
+  --bg-footer: rgb(146, 91, 45);
+  --border-footer-top: rgb(134, 134, 134);
+  --bg-option-onHover:antiquewhite;
+  --border-input-onFocus: rgb(182, 181, 181)
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+[data-theme="dark"]{
+   --bg-graph-temp:rgba(245, 158, 11, 0.4);
+  --bg-page:rgb(36, 36, 36);
+  --bg-nav:rgb(0, 0, 0);
+  --bg-footer: rgb(54, 36, 20);
+  --border-footer-top: rgb(75, 75, 75);
+  --bg-option-onHover:rgb(72, 54, 38);
+  --border-input-onFocus:rgb(120, 120, 120);
 }
 /* 
 a {

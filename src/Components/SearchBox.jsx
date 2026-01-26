@@ -7,14 +7,14 @@ export default function SearchBox({ setResult }) {
     let [options, setOptions] = useState([])
     let [selectedOption, setSelectedOption] = useState(null);
     let [cache, setCache] = useState({});
-    let [isChoosing, setIsChoosing] = useState(false)
+    let [isChoosing, setIsChoosing] = useState(false);
+    let [keyNav, setKeyNav] = useState(-1);
     let handleChange = (event) => {
-        console.log(event.target.value);
         setInput(event.target.value);
         setIsChoosing(true);
-        if(event.target.value=""){
+        if (event.target.value = "") {
             setIsChoosing(false);
-            return ;
+            return;
         }
     }
 
@@ -41,6 +41,27 @@ export default function SearchBox({ setResult }) {
         }
     }, [input]);
 
+    let handleKeyBoardNav = (event) => {
+        if (event.code === "ArrowDown" && keyNav < options.length - 1) {
+            setKeyNav(prev => {
+                return prev + 1;
+            });
+        } else if (event.code === "ArrowUp" && keyNav > 0) {
+            setKeyNav(prev => {
+                return prev - 1;
+            });
+        }
+        else if (event.code === "Enter") {
+            options.map((el, index) => {
+                if (keyNav === index) {
+                    setSelectedOption(el);
+                    setIsChoosing(false);
+                }
+            })
+        }
+
+    }
+    
     let searchWeather = async (lat, lon) => {
         let weatherUrl = import.meta.env.VITE_OPENWEATHER_URL;
         let apiKey = import.meta.env.VITE_API_KEY;
@@ -54,14 +75,14 @@ export default function SearchBox({ setResult }) {
             return allowedHours.includes(hour);
         });
 
-        let finalData = result.map(el => {
+        let finalData = list.map(el => {
             const [date, time] = el.dt_txt.split(" ");
             let { main } = el;
             return {
                 code: country,
                 city: name,
                 date,
-                time,
+                time:time.split(":")[0],
                 temp: main.temp,
                 feelsLike: main.feels_like,
                 minTemp: main.temp_min,
@@ -93,9 +114,6 @@ export default function SearchBox({ setResult }) {
         searchWeather(selectedOption.lat, selectedOption.lon);
     }, [selectedOption])
 
-
-
-
     let inpStyles = {
         borderRadius: "2rem",
         backgroundColor: isChoosing ? "white" : "#ececec",
@@ -112,11 +130,12 @@ export default function SearchBox({ setResult }) {
                         className="form-control SearchBox"
                         value={input}
                         onChange={handleChange}
+                        onKeyDown={handleKeyBoardNav}
                     />
                 </div>
                 <ul className='options'>
                     {(isChoosing && options.length > 0) && options.map((el, index) => {
-                        return <li key={index} onClick={handleSearch} type="submit">{el.name},{el.country}</li>
+                        return <li key={index} onClick={handleSearch} type="submit" className={keyNav === index?"on-hover":null}>{el.name},{el.country}</li>
                     })}
                 </ul>
 
