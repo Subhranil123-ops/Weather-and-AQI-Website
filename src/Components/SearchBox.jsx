@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import StormIcon from '@mui/icons-material/Storm';
 import "./SearchBox.css"
+import { geoUrl, apiKey, limit, weatherUrl } from "../services/weather.js"
 
-export default function SearchBox({ setResult }) {
+export default function SearchBox({ setResult, unit }) {
     let [input, setInput] = useState("");
     let [options, setOptions] = useState([])
     let [selectedOption, setSelectedOption] = useState(null);
     let [cache, setCache] = useState({});
     let [isChoosing, setIsChoosing] = useState(false);
     let [keyNav, setKeyNav] = useState(-1);
+
     let handleChange = (event) => {
         setInput(event.target.value);
         setIsChoosing(true);
@@ -19,9 +20,7 @@ export default function SearchBox({ setResult }) {
     }
 
     let searchLocations = async () => {
-        let geoUrl = import.meta.env.VITE_OPENWEATHER_GEO_URL;
-        let apiKey = import.meta.env.VITE_API_KEY;
-        let limit = 5;
+
         if (input) {
             let resCoordinates = await fetch(`/api${geoUrl}?q=${input}&limit=${limit}&appid=${apiKey}`);
             let jsonCoordinates = await resCoordinates.json();
@@ -59,30 +58,29 @@ export default function SearchBox({ setResult }) {
                 }
             })
         }
-
     }
-    
+
     let searchWeather = async (lat, lon) => {
-        let weatherUrl = import.meta.env.VITE_OPENWEATHER_URL;
-        let apiKey = import.meta.env.VITE_API_KEY;
-        let resWeather = await fetch(`/api${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
+        let units = unit === "cel" ? "metric" : "imperial"
+        let resWeather = await fetch(`/api${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=`+units);
         let jsonWeather = await resWeather.json();
         let { list, city } = jsonWeather;
         let { country, name } = city;
-        let result = list.filter(el => {
-            let hour = el.dt_txt.split(" ")[1].split(":")[0];
-            const allowedHours = ["09", "12", "03", "18", "00"];
-            return allowedHours.includes(hour);
-        });
-
+        // let result = list.filter(el => {
+        //     let hour = el.dt_txt.split(" ")[1].split(":")[0];
+        //     const allowedHours = ["09", "12", "03", "18", "00"];
+        //     return allowedHours.includes(hour);
+        // });
+        // console.log(list)
         let finalData = list.map(el => {
-            const [date, time] = el.dt_txt.split(" ");
+            let [date] = el.dt_txt.split(" ")
+            let time = new Date(el.dt_txt).toLocaleString('en-US', { hour: 'numeric', hour12: true })
             let { main } = el;
             return {
                 code: country,
                 city: name,
                 date,
-                time:time.split(":")[0],
+                time: time.toLowerCase(),
                 temp: main.temp,
                 feelsLike: main.feels_like,
                 minTemp: main.temp_min,
@@ -91,11 +89,10 @@ export default function SearchBox({ setResult }) {
                 pressure: main.pressure,
                 seaLevel: main.sea_level
             }
-
         });
         setResult(finalData);
+        setCache(prev=>({...prev,[unit]:finalData})); 
         console.log(finalData);
-
     };
 
     let handleSearch = (event) => {
@@ -112,7 +109,7 @@ export default function SearchBox({ setResult }) {
     useEffect(() => {
         if (selectedOption === null) return;
         searchWeather(selectedOption.lat, selectedOption.lon);
-    }, [selectedOption])
+    }, [selectedOption,unit])
 
     let inpStyles = {
         borderRadius: "2rem",
@@ -134,9 +131,10 @@ export default function SearchBox({ setResult }) {
                     />
                 </div>
                 <ul className='options'>
-                    {(isChoosing && options.length > 0) && options.map((el, index) => {
-                        return <li key={index} onClick={handleSearch} type="submit" className={keyNav === index?"on-hover":null}>{el.name},{el.country}</li>
-                    })}
+                    {(isChoosing && options.length > 0) &&
+                        options.map((el, index) => {
+                            return <li key={index} onClick={handleSearch} type="submit" className={keyNav === index ? "on-hover" : null}>{el.name},{el.country}</li>
+                        })}
                 </ul>
 
             </div>

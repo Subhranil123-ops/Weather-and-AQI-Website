@@ -1,0 +1,16 @@
+.custom-tooltip {
+  background-color: white;
+  padding: 0.25rem;
+
+  border-radius: 0.25rem;
+  box-shadow: 0.05rem 0.05rem 0.5rem rgb(181, 181, 181);
+}
+
+.custom-tooltip p {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.Chart :focus {
+  outline: none;
+}

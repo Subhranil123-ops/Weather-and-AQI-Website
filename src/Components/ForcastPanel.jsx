@@ -1,8 +1,12 @@
 import TimeChart from "./Timechart"
-export default function ForcastPanel({ result }) {
+import TemperatureToggle from "./TemperatureToggle"
+
+export default function ForcastPanel({ result,setUnit,unit }) {
+    
     return (
         <div className="ForcastPanel">
-            <TimeChart data={result}/>
+            <TemperatureToggle onUnitChange={setUnit} unit={unit}/>
+            <TimeChart data={result} />
         </div>
     )
 }

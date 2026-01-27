@@ -1,10 +1,34 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
+import "./Timechart.css"
 
-
-export default function TimeChart({ data, isAnimationActive }) {
-
+const CustomTooltip = ({ active, payload, label }) => {
+    const isVisible = active && payload && payload.length;
+    let day = "";
+    if (isVisible) {
+        let payloadDate = payload[0]?.payload?.date;
+        let date = new Date(payloadDate);
+        let formater = new Intl.DateTimeFormat("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "2-digit"
+        })
+        day = formater.format(date);
+    }
     return (
-        <div className="Chart" >
+        <div className="custom-tooltip" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+            {isVisible && (
+                <>
+                    <p><b>{day}</b></p>
+                    <p className="label">{`Temp: ${payload[0]?.payload?.temp}`}</p>
+                </>
+            )}
+        </div>
+    );
+};
+
+export default function TimeChart({ data,isAnimationActive }) {
+    return (
+        <div className="Chart mt-5" >
             <ResponsiveContainer width="100%" height={250}>
                 <AreaChart
                     // style={{ width: '100%', margin:"auto", maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
@@ -26,18 +50,37 @@ export default function TimeChart({ data, isAnimationActive }) {
                         fillOpacity={1}
                         fill="url(#colorTime)"
                         name="Temperature"
-                    // isAnimationActive={isAnimationActive}
+                        isAnimationActive={isAnimationActive}
+                        activeDot={false}
                     />
                     <XAxis
                         dataKey="time"
                         axisLine={false}
-                        tickLine={false} />
+                        tickLine={false}
+                        style={{ fontSize: "0.8rem" }}
+                        label={
+                            {
+                                value: "Time",
+                                position: "insideBottom",
+                                offset: -5
+                            }} />
                     <YAxis
                         dataKey="temp"
                         axisLine={false}
                         tickLine={false}
-                        label={{value:"Temperature",angle: -90,position:"insideLeft"}} />
-                    <Tooltip />
+                        style={{ fontSize: "0.8rem" }}
+                        label={
+                            {
+                                value: "Temperature",
+                                angle: -90,
+                                position: "insideLeft",
+                                textAnchor: 'middle'
+                            }} />
+                    <Tooltip cursor={
+                        { strokeDasharray: "3 3" }}
+                        content={CustomTooltip}
+                        isAnimationActive={isAnimationActive}
+                        animationEasing={"ease-in-out"} />
                     <CartesianGrid opacity={0.2} vertical={false} />
                 </AreaChart>
             </ResponsiveContainer>
