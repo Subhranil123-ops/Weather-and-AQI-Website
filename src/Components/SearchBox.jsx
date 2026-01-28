@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import "./SearchBox.css"
 import { geoUrl, apiKey, limit, weatherUrl } from "../services/weather.js"
 
-export default function SearchBox({ setResult, unit }) {
+export default function SearchBox({ setResult, value }) {
     let [input, setInput] = useState("");
     let [options, setOptions] = useState([])
     let [selectedOption, setSelectedOption] = useState(null);
@@ -61,7 +61,7 @@ export default function SearchBox({ setResult, unit }) {
     }
 
     let searchWeather = async (lat, lon) => {
-        let units = unit === "cel" ? "metric" : "imperial"
+        let units = value === "metric" ? "metric" : "imperial"
         let resWeather = await fetch(`/api${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=`+units);
         let jsonWeather = await resWeather.json();
         let { list, city } = jsonWeather;
@@ -91,7 +91,7 @@ export default function SearchBox({ setResult, unit }) {
             }
         });
         setResult(finalData);
-        setCache(prev=>({...prev,[unit]:finalData})); 
+        setCache(prev=>({...prev,[value]:finalData})); 
         console.log(finalData);
     };
 
@@ -109,7 +109,7 @@ export default function SearchBox({ setResult, unit }) {
     useEffect(() => {
         if (selectedOption === null) return;
         searchWeather(selectedOption.lat, selectedOption.lon);
-    }, [selectedOption,unit])
+    }, [selectedOption,value])
 
     let inpStyles = {
         borderRadius: "2rem",

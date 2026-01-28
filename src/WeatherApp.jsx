@@ -4,12 +4,12 @@ import { useState } from 'react';
 
 export default function WeatherApp() {
     let [result, setResult] = useState([]);
-    let [unit, setUnit] = useState("cel");
+    let [value, setValue] = useState("metric");
 
     return (
         <>
-            <SearchBox setResult={setResult} unit={unit} />
-            <ForcastPanel result={result} setUnit={setUnit} unit={unit} />
+            <SearchBox setResult={setResult} value={value} />
+            <ForcastPanel result={result} setValue={setValue} value={value} />
         </>
     )
 }
