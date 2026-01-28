@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import "./SearchBox.css"
 import { geoUrl, apiKey, limit, weatherUrl } from "../services/weather.js"
 
-export default function SearchBox({ setResult, value }) {
+export default function SearchBox({ setResult, unit }) {
     let [input, setInput] = useState("");
     let [options, setOptions] = useState([])
     let [selectedOption, setSelectedOption] = useState(null);
@@ -61,7 +61,7 @@ export default function SearchBox({ setResult, value }) {
     }
 
     let searchWeather = async (lat, lon) => {
-        let units = value === "metric" ? "metric" : "imperial"
+        let units = unit === "metric" ? "metric" : "imperial"
         let resWeather = await fetch(`/api${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=`+units);
         let jsonWeather = await resWeather.json();
         let { list, city } = jsonWeather;
@@ -73,7 +73,7 @@ export default function SearchBox({ setResult, value }) {
         // });
         // console.log(list)
         let finalData = list.map(el => {
-            let [date] = el.dt_txt.split(" ")
+            let [date] = el.dt_txt.split(" ");
             let time = new Date(el.dt_txt).toLocaleString('en-US', { hour: 'numeric', hour12: true })
             let { main } = el;
             return {
@@ -91,7 +91,7 @@ export default function SearchBox({ setResult, value }) {
             }
         });
         setResult(finalData);
-        setCache(prev=>({...prev,[value]:finalData})); 
+        // setCache(prev=>({...prev,[unit]:finalData})); 
         console.log(finalData);
     };
 
@@ -109,7 +109,7 @@ export default function SearchBox({ setResult, value }) {
     useEffect(() => {
         if (selectedOption === null) return;
         searchWeather(selectedOption.lat, selectedOption.lon);
-    }, [selectedOption,value])
+    }, [selectedOption,unit])
 
     let inpStyles = {
         borderRadius: "2rem",

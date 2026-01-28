@@ -1,40 +1,41 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
-import "./Timechart.css"
+import "./Chart.css"
 
-const CustomTooltip = ({ active, payload, label }) => {
-    const isVisible = active && payload && payload.length;
-    let day = "";
-    if (isVisible) {
-        let payloadDate = payload[0]?.payload?.date;
-        let date = new Date(payloadDate);
-        let formater = new Intl.DateTimeFormat("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "2-digit"
-        })
-        day = formater.format(date);
-    }
-    return (
-        <div className="custom-tooltip" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
-            {isVisible && (
-                <>
-                    <p><b>{day}</b></p>
-                    <p className="label">{`Temp: ${payload[0]?.payload?.temp}`}</p>
-                </>
-            )}
-        </div>
-    );
-};
-
-export default function TimeChart({ data,isAnimationActive }) {
+export default function TimeChart({ data, isAnimationActive, graphType, unit }) {
+    let isTemp = graphType === "temp" ? true : false;
+    let unitLabel = unit === "metric" ? "°C" : "°F";
+    const CustomTooltip = ({ active, payload, label }) => {
+        const isVisible = active && payload && payload.length;
+        let day = "";
+        if (isVisible) {
+            let payloadDate = payload[0]?.payload?.date;
+            let date = new Date(payloadDate);
+            let formater = new Intl.DateTimeFormat("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "2-digit"
+            })
+            day = formater.format(date);
+        }
+        return (
+            <div className="custom-tooltip" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+                {isVisible && (
+                    <>
+                        <p><b>{day}</b></p>
+                        <p className="label">
+                            {isTemp ? `Temp: ${payload[0]?.payload?.temp + unitLabel}` :
+                                `Feels Like: ${payload[0]?.payload?.feelsLike + unitLabel}`}
+                        </p>
+                    </>
+                )}
+            </div>
+        );
+    };
     return (
         <div className="Chart mt-5" >
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={150}>
                 <AreaChart
-                    // style={{ width: '100%', margin:"auto", maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
-                    // responsive
                     data={data}
-                // margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
                 >
                     <defs>
                         <linearGradient id="colorTime" x1="0" y1="0" x2="0" y2="1">
@@ -44,7 +45,7 @@ export default function TimeChart({ data,isAnimationActive }) {
                     </defs>
                     <Area
                         type="monotone"
-                        dataKey="temp"
+                        dataKey={graphType === "temp" ? "temp" : "feelsLike"}
                         stroke="#e9551b"
                         strokeWidth={3}
                         fillOpacity={1}
@@ -55,7 +56,6 @@ export default function TimeChart({ data,isAnimationActive }) {
                     />
                     <XAxis
                         dataKey="time"
-                        axisLine={false}
                         tickLine={false}
                         style={{ fontSize: "0.8rem" }}
                         label={
@@ -65,13 +65,17 @@ export default function TimeChart({ data,isAnimationActive }) {
                                 offset: -5
                             }} />
                     <YAxis
-                        dataKey="temp"
+                        dataKey={graphType === "temp" ? "temp" : "feelsLike"}
                         axisLine={false}
                         tickLine={false}
+                        tickFormatter={tick => {
+
+                            return tick + unitLabel;
+                        }}
                         style={{ fontSize: "0.8rem" }}
                         label={
                             {
-                                value: "Temperature",
+                                value: graphType === "temp" ? "Temperature" : "Feels Like",
                                 angle: -90,
                                 position: "insideLeft",
                                 textAnchor: 'middle'
