@@ -1,0 +1,1 @@
+export {default as sunny } from "./Weather-sunny.json"

@@ -1,27 +1,16 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
 import "./Chart.css"
 
-export default function TimeChart({ data, isAnimationActive, graphType, unit }) {
+export default function TimeChart({ isAnimationActive, graphType, unit,dayForecastData }) {
     let isTemp = graphType === "temp" ? true : false;
     let unitLabel = unit === "metric" ? "°C" : "°F";
     const CustomTooltip = ({ active, payload, label }) => {
         const isVisible = active && payload && payload.length;
-        let day = "";
-        if (isVisible) {
-            let payloadDate = payload[0]?.payload?.date;
-            let date = new Date(payloadDate);
-            let formater = new Intl.DateTimeFormat("en-US", {
-                weekday: "short",
-                month: "short",
-                day: "2-digit"
-            })
-            day = formater.format(date);
-        }
         return (
             <div className="custom-tooltip" style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
                 {isVisible && (
                     <>
-                        <p><b>{day}</b></p>
+                        <p><b>{payload[0]?.payload?.date}</b></p>
                         <p className="label">
                             {isTemp ? `Temp: ${payload[0]?.payload?.temp + unitLabel}` :
                                 `Feels Like: ${payload[0]?.payload?.feelsLike + unitLabel}`}
@@ -35,7 +24,7 @@ export default function TimeChart({ data, isAnimationActive, graphType, unit }) 
         <div className="Chart mt-5" >
             <ResponsiveContainer width="100%" height={150}>
                 <AreaChart
-                    data={data}
+                    data={dayForecastData}
                 >
                     <defs>
                         <linearGradient id="colorTime" x1="0" y1="0" x2="0" y2="1">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import "./SearchBox.css"
+import dateFormater from "../utils/date.js"
 import { geoUrl, apiKey, limit, weatherUrl } from "../services/weather.js"
 
 export default function SearchBox({ setResult, unit }) {
@@ -62,8 +63,9 @@ export default function SearchBox({ setResult, unit }) {
 
     let searchWeather = async (lat, lon) => {
         let units = unit === "metric" ? "metric" : "imperial"
-        let resWeather = await fetch(`/api${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=`+units);
+        let resWeather = await fetch(`/api${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=` + units);
         let jsonWeather = await resWeather.json();
+
         let { list, city } = jsonWeather;
         let { country, name } = city;
         // let result = list.filter(el => {
@@ -71,15 +73,19 @@ export default function SearchBox({ setResult, unit }) {
         //     const allowedHours = ["09", "12", "03", "18", "00"];
         //     return allowedHours.includes(hour);
         // });
-        // console.log(list)
+        console.log(jsonWeather)
         let finalData = list.map(el => {
             let [date] = el.dt_txt.split(" ");
             let time = new Date(el.dt_txt).toLocaleString('en-US', { hour: 'numeric', hour12: true })
             let { main } = el;
+            let dateObject = new Date(date);
+            let formater = dateFormater();
+            let formatedDate = formater.format(dateObject);
+            
             return {
                 code: country,
                 city: name,
-                date,
+                date: formatedDate,
                 time: time.toLowerCase(),
                 temp: main.temp,
                 feelsLike: main.feels_like,
@@ -109,7 +115,7 @@ export default function SearchBox({ setResult, unit }) {
     useEffect(() => {
         if (selectedOption === null) return;
         searchWeather(selectedOption.lat, selectedOption.lon);
-    }, [selectedOption,unit])
+    }, [selectedOption, unit])
 
     let inpStyles = {
         borderRadius: "2rem",
