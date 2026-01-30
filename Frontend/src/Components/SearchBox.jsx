@@ -73,15 +73,14 @@ export default function SearchBox({ setResult, unit }) {
         //     const allowedHours = ["09", "12", "03", "18", "00"];
         //     return allowedHours.includes(hour);
         // });
-        console.log(jsonWeather)
+        console.log(list);
         let finalData = list.map(el => {
             let [date] = el.dt_txt.split(" ");
             let time = new Date(el.dt_txt).toLocaleString('en-US', { hour: 'numeric', hour12: true })
-            let { main } = el;
+            let { main,weather } = el;
             let dateObject = new Date(date);
             let formater = dateFormater();
             let formatedDate = formater.format(dateObject);
-            
             return {
                 code: country,
                 city: name,
@@ -93,7 +92,8 @@ export default function SearchBox({ setResult, unit }) {
                 maxTemp: main.temp_max,
                 humidity: main.humidity,
                 pressure: main.pressure,
-                seaLevel: main.sea_level
+                seaLevel: main.sea_level,
+                weather:weather?.[0]?.main
             }
         });
         setResult(finalData);
@@ -130,7 +130,7 @@ export default function SearchBox({ setResult, unit }) {
                     <input
                         style={inpStyles}
                         type="text"
-                        className="form-control SearchBox"
+                        className="form-control mb-3 SearchBox"
                         value={input}
                         onChange={handleChange}
                         onKeyDown={handleKeyBoardNav}

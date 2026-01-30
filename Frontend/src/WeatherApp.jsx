@@ -14,7 +14,8 @@ export default function WeatherApp() {
                 setUnit={setUnit}
                 unit={unit}
                 graphType={graphType}
-                setGraphType={setGraphType} />
+                setGraphType={setGraphType}
+            />
         </>
     )
 }

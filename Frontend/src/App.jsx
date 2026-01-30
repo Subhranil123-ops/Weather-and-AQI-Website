@@ -1,4 +1,3 @@
-import './App.css'
 import Layout from './Components/Layout.jsx'
 import WeatherApp from "./WeatherApp.jsx"
 import Sidebar from "./Components/Sidebar.jsx"

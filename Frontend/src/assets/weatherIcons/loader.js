@@ -1,1 +1,5 @@
 export {default as sunny } from "./Weather-sunny.json"
+export{default as clear} from "./ClearSky.json"
+export{default as fog} from "./Fog.json"
+export{default as rain} from "./Rain.json"
+export{default as cloudy} from "./Cloudy.json"
