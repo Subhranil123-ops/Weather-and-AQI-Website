@@ -11,7 +11,7 @@ export default function WeatherCard({ date, data, setDayForecastData, avgTemp, a
         setDayForecastData(prev => data.filter(prev => date === prev.date));
     }
     return (
-        <Card >
+        <Card className='WeatherCard' sx={{width:"7rem",minHeight:"10rem",backdropFilter:"blur(10px)",border:"1px solid transparent", boxShadow:"none", marginLeft:"0.25rem"}} >
             <CardActionArea onClick={() => handleChange(date)} >
                 <CardContent style={{
                     display: "flex",
@@ -19,7 +19,7 @@ export default function WeatherCard({ date, data, setDayForecastData, avgTemp, a
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    <Typography variant="p" >
+                    <Typography variant="p" sx={{textAlign:"center"}} >
                         <b>{date}</b>
                     </Typography>
                     <Lottie
@@ -29,15 +29,14 @@ export default function WeatherCard({ date, data, setDayForecastData, avgTemp, a
                         style={{ width: "4vmax", height: "4vmax" }}
                     />
                     <div className="temperature">
-                        <Typography variant="p">
+                        <Typography variant="caption" sx={{opacity:0.8}}>
                            {avgTemp}
                         </Typography>
-                        <Typography variant="p">
+                        <Typography variant="caption" sx={{opacity:0.8}}>
                             {avgFeelsLike}
                         </Typography>
                     </div>
                 </CardContent>
-
             </CardActionArea>
         </Card>
     )

@@ -1,4 +1,4 @@
 .WeatherCards{
     display: flex;
-    gap: 5rem;
+    align-items: stretch;
 }

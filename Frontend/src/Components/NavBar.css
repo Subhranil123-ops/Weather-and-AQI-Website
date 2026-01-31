@@ -38,6 +38,7 @@
 }
 
 .navbar-logo {
+    font-size: 1.45rem;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -71,6 +72,16 @@
 .navbar-menu .navbar-item {
     cursor: pointer;
 }
+
+.themeButton {
+    background-color:var(--bg-nav) ;
+}
+
+.themeButton:hover {
+    background-color:rgb(192, 192, 192);
+    border-radius: 50%;
+}
+
 
 
 

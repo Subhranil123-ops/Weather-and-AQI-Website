@@ -1,5 +1,8 @@
-.Togglers{
-    display: flex;
-    align-items: start;
-    gap: 1rem;
+.Togglers {
+  display: flex;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  flex-wrap: wrap;              
+  justify-content: center;
+  align-items: center;
 }
+

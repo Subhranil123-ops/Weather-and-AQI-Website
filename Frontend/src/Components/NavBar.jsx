@@ -29,7 +29,7 @@ export default function NavBar() {
                     </ul>
                 </div>
                 <div className="right-content">
-                    <div> <IconButton onClick={handleTheme}>
+                    <div className='themeButton'> <IconButton onClick={handleTheme}>
                         {light ? <LightModeIcon /> : <DarkModeIcon />}
                     </IconButton>
                     </div>
