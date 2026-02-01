@@ -12,9 +12,12 @@ export default function ForcastPanel({ result, setUnit, unit, graphType, setGrap
             <TimeChart
                 graphType={graphType}
                 unit={unit}
+                data={result}
                 dayForecastData={dayForecastData} />
             <WeatherCards
                 data={result}
+                unit={unit}
+                dayForecastData={dayForecastData}
                 setDayForecastData={setDayForecastData} />
         </div>
     )

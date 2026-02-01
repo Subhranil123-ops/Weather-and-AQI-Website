@@ -1,7 +1,8 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
 import "./Chart.css"
 
-export default function TimeChart({ isAnimationActive, graphType, unit,dayForecastData }) {
+export default function TimeChart({ isAnimationActive, graphType, unit, dayForecastData }) {
+
     let isTemp = graphType === "temp" ? true : false;
     let unitLabel = unit === "metric" ? "°C" : "°F";
     const CustomTooltip = ({ active, payload, label }) => {
@@ -46,6 +47,7 @@ export default function TimeChart({ isAnimationActive, graphType, unit,dayForeca
                     <XAxis
                         dataKey="time"
                         tickLine={false}
+                        axisLine={false}
                         style={{ fontSize: "0.8rem" }}
                         label={
                             {
@@ -58,7 +60,6 @@ export default function TimeChart({ isAnimationActive, graphType, unit,dayForeca
                         axisLine={false}
                         tickLine={false}
                         tickFormatter={tick => {
-
                             return tick + unitLabel;
                         }}
                         style={{ fontSize: "0.8rem" }}

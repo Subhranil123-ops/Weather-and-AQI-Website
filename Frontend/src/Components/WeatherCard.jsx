@@ -5,14 +5,24 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Lottie from 'react-lottie-player'
 import { sunny } from "../assets/weatherIcons/loader.js"
 import "./WeatherCard.css"
-
-export default function WeatherCard({ date, data, setDayForecastData, avgTemp, avgFeelsLike }) {
-    let handleChange = (date) => {
-        setDayForecastData(prev => data.filter(prev => date === prev.date));
+import { useEffect } from 'react';
+export default function WeatherCard({ date, data, setDayForecastData, avgTemp, avgFeelsLike,unit,handleClick }) {
+    let handleClick = (date) => {
+        console.log(date)
+        // console.log("data",data)
+        // let day=data.filter(el => date === el.date);
+        // // console.log("day",day);
+        // console.log(date);
+        // console.log(data)
+        // setDayForecastData(data.filter(prev => date === prev.date));
     }
     return (
-        <Card className='WeatherCard' sx={{width:"7rem",minHeight:"10rem",backdropFilter:"blur(10px)",border:"1px solid transparent", boxShadow:"none", marginLeft:"0.25rem"}} >
-            <CardActionArea onClick={() => handleChange(date)} >
+        <Card className='WeatherCard' sx={{width:"7rem",
+        minHeight:"10rem",
+        backdropFilter:"blur(10px)",
+        border:"1px solid transparent", 
+        boxShadow:"none", marginLeft:"0.25rem"}} >
+            <CardActionArea onClick={() => handleClick(date)} >
                 <CardContent style={{
                     display: "flex",
                     flexDirection: "column",

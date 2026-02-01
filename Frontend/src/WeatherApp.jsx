@@ -8,7 +8,7 @@ export default function WeatherApp() {
     let [graphType, setGraphType] = useState("temp");
     return (
         <>
-            <SearchBox setResult={setResult} unit={unit} graphType={graphType} />
+            <SearchBox setResult={setResult} unit={unit}  />
             <ForcastPanel
                 result={result}
                 setUnit={setUnit}
