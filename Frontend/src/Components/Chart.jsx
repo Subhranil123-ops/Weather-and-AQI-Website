@@ -1,7 +1,7 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
 import "./Chart.css"
 
-export default function TimeChart({ isAnimationActive, graphType, unit, dayForecastData }) {
+export default function TimeChart({ isAnimationActive, graphType, unit,data }) {
 
     let isTemp = graphType === "temp" ? true : false;
     let unitLabel = unit === "metric" ? "°C" : "°F";
@@ -25,7 +25,7 @@ export default function TimeChart({ isAnimationActive, graphType, unit, dayForec
         <div className="Chart mt-5" >
             <ResponsiveContainer width="100%" height={150}>
                 <AreaChart
-                    data={dayForecastData}
+                    data={data}
                 >
                     <defs>
                         <linearGradient id="colorTime" x1="0" y1="0" x2="0" y2="1">
@@ -36,6 +36,7 @@ export default function TimeChart({ isAnimationActive, graphType, unit, dayForec
                     <Area
                         type="monotone"
                         dataKey={graphType === "temp" ? "temp" : "feelsLike"}
+                        // dataKey={data}
                         stroke="#e9551b"
                         strokeWidth={3}
                         fillOpacity={1}

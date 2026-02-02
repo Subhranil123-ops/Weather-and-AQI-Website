@@ -1,24 +1,9 @@
 import WeatherCard from "./WeatherCard"
 import "./WeatherCards.css"
-import { sunny } from "../assets/weatherIcons/loader.js"
-import { clear } from "../assets/weatherIcons/loader.js"
-import { fog } from "../assets/weatherIcons/loader.js"
-import { rain } from "../assets/weatherIcons/loader.js"
-import { cloudy } from "../assets/weatherIcons/loader.js"
-
-export default function WeatherCards({ data, dayForecastData, setDayForecastData, unit }) {
 
 
-    // console.log("data",data)
-    // let day=data.filter(el => date === el.date);
-    // // console.log("day",day);
-    // console.log(date);
-    // console.log(data)
-    // setDayForecastData(data.filter(prev => date === prev.date));
+export default function WeatherCards({ data, unit, setDate,iconWeather }) {
 
-    // useEffect(()=>{
-    //   setDayForecastData(data.filter(prev => date === prev.date))
-    // },[unit])
     let units = unit === "metric" ? "°C" : "°F";
     let groupedByDate = {};
     data.forEach(el => {
@@ -48,8 +33,6 @@ export default function WeatherCards({ data, dayForecastData, setDayForecastData
         let avgTemp = sumOfTemps / groupedByDate[el].temp.length;
         let sumOfFeelsLike = groupedByDate[el].feelsLike.reduce((acc, el) => acc + el);
         let avgFeelsLike = sumOfFeelsLike / groupedByDate[el].feelsLike.length;
-        let handleClick = (date) => {
-        }
         return {
             date: el,
             avgTemp: avgTemp.toFixed(2) + units,
@@ -67,10 +50,9 @@ export default function WeatherCards({ data, dayForecastData, setDayForecastData
                         date={el.date}
                         avgTemp={el.avgTemp}
                         avgFeelsLike={el.avgFeelsLike}
-                        dayForecastData={dayForecastData}
-                        setDayForecastData={setDayForecastData}
                         data={data}
-                        onClick={handleClick}
+                        setDate={setDate}
+                        iconWeather={iconWeather}
                     />
                 })}
             </div>
