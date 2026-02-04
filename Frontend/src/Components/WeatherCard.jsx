@@ -6,7 +6,7 @@ import Lottie from 'react-lottie-player'
 import { sunny } from "../assets/weatherIcons/loader.js"
 import "./WeatherCard.css"
 import { useEffect } from 'react';
-export default function WeatherCard({ date, avgTemp, avgFeelsLike, setDate,iconWeather}) {
+export default function WeatherCard({ date, avgTemp, avgFeelsLike, setDate,img}) {
 
     let handleClick = () => {
         setDate(date);
@@ -32,7 +32,7 @@ export default function WeatherCard({ date, avgTemp, avgFeelsLike, setDate,iconW
                     </Typography>
                     <Lottie
                         loop
-                        animationData={iconWeather}
+                        animationData={img}
                         play
                         style={{ width: "4vmax", height: "4vmax" }}
                     />

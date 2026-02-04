@@ -1,8 +1,12 @@
 import WeatherCard from "./WeatherCard"
 import "./WeatherCards.css"
+import { sunny } from "../assets/weatherIcons/loader.js"
+import { clear } from "../assets/weatherIcons/loader.js"
+import { fog } from "../assets/weatherIcons/loader.js"
+import { rain } from "../assets/weatherIcons/loader.js"
+import { cloudy } from "../assets/weatherIcons/loader.js"
 
-
-export default function WeatherCards({ data, unit, setDate,iconWeather }) {
+export default function WeatherCards({ data, unit, setDate, iconWeather, oneDayData }) {
 
     let units = unit === "metric" ? "°C" : "°F";
     let groupedByDate = {};
@@ -33,10 +37,44 @@ export default function WeatherCards({ data, unit, setDate,iconWeather }) {
         let avgTemp = sumOfTemps / groupedByDate[el].temp.length;
         let sumOfFeelsLike = groupedByDate[el].feelsLike.reduce((acc, el) => acc + el);
         let avgFeelsLike = sumOfFeelsLike / groupedByDate[el].feelsLike.length;
+        let eachDayWeather = data.filter(res => res.date === el);
+        let weather = eachDayWeather.map(el => el.weather);
+        let arr = [];
+        let s = 0;
+        let cr = 0;
+        let f = 0;
+        let r = 0;
+        let cl = 0;
+        for (let i = 0; i < weather.length; i++) {
+            if (weather[i] === "Sunny") {
+                s++;
+            } else if (weather[i] === "Clear") {
+                cr++;
+            } else if (weather[i] === "Fog") {
+                f++;
+            } else if (weather[i] === "Rain") {
+                r++;
+            } else if (weather[i] === "Clouds") {
+                cl++;
+            }
+        }
+        arr.push(s, cr, f, r, cl);
+        let max = -1;
+        for (let i = 0; i < arr.length; i++) {
+            if (max <= arr[i]) max = arr[i];
+        }
+        let img;
+        if (max === s) img = sunny;
+        if (max === cr) img = clear;
+        else if (max === f) img = fog;
+        else if (max === r) img = rain;
+        else if (max === cl) img = cloudy;
+
         return {
             date: el,
             avgTemp: avgTemp.toFixed(2) + units,
             avgFeelsLike: avgFeelsLike.toFixed(2) + units,
+            img
         }
     })
 
@@ -52,7 +90,7 @@ export default function WeatherCards({ data, unit, setDate,iconWeather }) {
                         avgFeelsLike={el.avgFeelsLike}
                         data={data}
                         setDate={setDate}
-                        iconWeather={iconWeather}
+                        img={el.img}
                     />
                 })}
             </div>
