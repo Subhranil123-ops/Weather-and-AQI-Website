@@ -2,7 +2,7 @@ import TimeChart from "./Chart"
 import Togglers from "./Togglers"
 import WeatherCards from "./WeatherCards.jsx"
 import { useEffect, useState } from 'react';
-
+import CurrentWeatherCard from "./CurrentWeatherCard.jsx";
 
 export default function ForcastPanel({ result, setUnit, unit, graphType, setGraphType }) {
     let state = result && result.length ? result[0].date : "";
@@ -33,6 +33,7 @@ export default function ForcastPanel({ result, setUnit, unit, graphType, setGrap
                     setDate={setDate}
                     oneDayData={oneDayData}
                 />
+                <CurrentWeatherCard data={oneDayData}/>
             </div>
         )
     }
